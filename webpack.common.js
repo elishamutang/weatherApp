@@ -39,7 +39,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: "What's the weather?",
+            title: "What's the weather mate?",
             filename: 'index.html',
             template: 'src/template.html',
         }),

@@ -2,6 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: Lexend, Arial, Helvetica, sans-serif;
 }
 
 :root {
@@ -19,7 +20,6 @@ body {
     justify-content: center;
     align-items: center;
     background-color: var(--background);
-    background-image: url('../asset/noaa-99F4mC79j1I-unsplash.jpg');
     object-fit: cover;
 }
 
@@ -41,15 +41,70 @@ body {
     grid-template-rows: 10% 90%;
     grid-template-areas:
         'searchbar searchbar'
-        'temperature forecast';
+        'main forecast';
 }
 
 #search {
     grid-area: searchbar;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#search input {
+    width: 50%;
+    height: 80%;
+    font-size: 20px;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+}
+
+#search input:focus {
+    outline: none;
+}
+
+.panel {
+    color: white;
+}
+
+#main-display {
+    grid-area: main;
+    border: 2px solid red;
+    border-radius: inherit;
+    width: 100%;
+
+    display: grid;
+    grid-template-rows: 80% 10% 10%;
+    grid-template-areas:
+        'temperature'
+        'location'
+        'time-min-max';
+}
+
+#main-display div {
+    border: 1px solid red;
+    padding-left: 2rem;
 }
 
 #temperature {
     grid-area: temperature;
+    font-size: 150px;
+
+    display: flex;
+    align-items: flex-end;
+}
+
+#location {
+    grid-area: location;
+    font-size: 1.5rem;
+
+    display: flex;
+}
+
+#time-min-max {
+    grid-area: time-min-max;
 }
 
 #forecast {

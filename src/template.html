@@ -5,13 +5,28 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title><%=htmlWebpackPlugin.options.title%></title>
         <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
     </head>
     <body>
         <div class="container">
             <div class="blur-sect">
-                <div class="info" id="search"></div>
-                <div class="info" id="temperature"></div>
-                <div class="info" id="forecast"></div>
+                <form action="" id="search">
+                    <input
+                        type="text"
+                        id="search-location"
+                        name="search-location"
+                        placeholder="Search a location"
+                        required
+                    />
+                </form>
+                <div class="panel" id="main-display">
+                    <div class="info" id="temperature"></div>
+                    <div class="info" id="location"></div>
+                    <div class="info" id="time-max-min"></div>
+                </div>
+                <div class="panel" id="forecast"></div>
             </div>
         </div>
     </body>
