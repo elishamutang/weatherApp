@@ -67,33 +67,44 @@ body {
 
 .panel {
     color: white;
+    border: 2px solid red;
+    border-radius: inherit;
 }
 
 #main-display {
     grid-area: main;
-    border: 2px solid red;
-    border-radius: inherit;
     width: 100%;
 
     display: grid;
-    grid-template-rows: 80% 10% 10%;
+    grid-template-rows: 50% auto 10% 10%;
     grid-template-areas:
+        '.'
         'temperature'
         'location'
-        'time-min-max';
+        'time-max-min';
 }
 
-#main-display div {
-    border: 1px solid red;
-    padding-left: 2rem;
+#main-display > div {
+    /* border: 1px solid red; */
+    padding-left: 4rem;
 }
 
 #temperature {
     grid-area: temperature;
-    font-size: 150px;
+    height: 100%;
+    container-type: size;
 
     display: flex;
     align-items: flex-end;
+}
+
+#temperature h1 {
+    font-size: 70cqh;
+}
+
+#temperature span {
+    font-size: 30cqh;
+    align-self: flex-start;
 }
 
 #location {
@@ -103,10 +114,93 @@ body {
     display: flex;
 }
 
-#time-min-max {
-    grid-area: time-min-max;
+#time-max-min {
+    grid-area: time-max-min;
+    font-size: 1.2rem;
+    container-type: size;
+
+    display: inline-flex;
+    gap: 1.5rem;
+}
+
+#time-max-min > div {
+    display: inline-flex;
+    height: 100%;
+}
+
+#time-max-min > div span {
+    font-size: 25cqh;
 }
 
 #forecast {
     grid-area: forecast;
+
+    display: grid;
+    grid-template-rows: 40% 60%;
+    grid-template-areas:
+        'hourly'
+        'fiveDay';
+}
+
+#forecast > div {
+    margin: 10px;
+    border: 2px solid red;
+    border-radius: 20px;
+}
+
+#hourly-forecast {
+    grid-area: hourly;
+
+    display: grid;
+    grid-template-rows: 30% 70%;
+    grid-template-areas:
+        'current-condition'
+        'hourly-interval';
+}
+
+#hourly-forecast > div {
+    padding: 1rem;
+}
+
+div#current-condition {
+    grid-area: current-condition;
+
+    border: none;
+    border-bottom: 2px solid var(--container);
+    border-radius: inherit;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+
+    font-size: 1rem;
+}
+
+#hourly-interval {
+    grid-area: hourly-interval;
+    container-type: inline-size;
+
+    display: inline-flex;
+}
+
+#hourly-interval > div {
+    width: calc(100cqw / 4);
+    height: 100%;
+
+    border: 1px solid red;
+}
+
+.hourlyElem {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    container-type: size;
+}
+
+.hourlyElem > * {
+    height: 100%;
+}
+
+#five-day-forecast {
+    grid-area: fiveDay;
 }
