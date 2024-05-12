@@ -178,7 +178,11 @@ div#current-condition {
     grid-area: hourly-interval;
     container-type: inline-size;
 
-    display: inline-flex;
+    display: grid;
+    grid-template-columns: repeat(24, 1fr);
+    grid-template-rows: 1fr;
+    overflow: scroll;
+    overflow-y: hidden;
 }
 
 #hourly-interval > div {
