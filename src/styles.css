@@ -150,21 +150,25 @@ body {
 
 #hourly-forecast {
     grid-area: hourly;
-
-    display: grid;
-    grid-template-rows: 30% 70%;
+    grid-template-rows: 25% 75%;
     grid-template-areas:
         'current-condition'
         'hourly-interval';
 }
 
-#hourly-forecast > div {
+.forecast-info {
+    display: grid;
+}
+
+.forecast-info > div {
     padding: 1rem;
 }
 
 div#current-condition {
     grid-area: current-condition;
+}
 
+.heading {
     border: none;
     border-bottom: 2px solid var(--container);
     border-radius: inherit;
@@ -181,8 +185,11 @@ div#current-condition {
     display: grid;
     grid-template-columns: repeat(24, 1fr);
     grid-template-rows: 1fr;
-    overflow: scroll;
-    overflow-y: hidden;
+    overflow: hidden;
+}
+
+#hourly-interval.active {
+    overflow-x: scroll;
 }
 
 #hourly-interval > div {
@@ -207,4 +214,21 @@ div#current-condition {
 
 #five-day-forecast {
     grid-area: fiveDay;
+    grid-template-rows: 20% 80%;
+    grid-template-areas:
+        'heading'
+        'day-interval';
+}
+
+#forecast-heading {
+    grid-area: heading;
+    container-type: size;
+    font-size: 2.5cqb;
+
+    display: flex;
+    align-items: flex-end;
+}
+
+#day-interval {
+    grid-area: day-interval;
 }
