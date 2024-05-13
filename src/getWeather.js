@@ -222,9 +222,6 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
                 minMaxDayPlacemark.style.marginLeft = `${normDataPoint}cqw`
             }
         })
-
-        console.log(`Max temp: ${Math.max(...fiveDayMinMaxTemps)}`)
-        console.log(`Min temp: ${Math.min(...fiveDayMinMaxTemps)}`)
     }
 
     fiveDayIntervalDisplay()
