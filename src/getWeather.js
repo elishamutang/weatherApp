@@ -167,6 +167,15 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
         const minMaxDayBar = document.createElement('div')
         minMaxDayBar.className = 'minMaxDayBar'
 
+        const minMaxDayRange = document.createElement('div')
+        minMaxDayRange.className = 'minMaxDayRange'
+
+        const minMaxDayPlacemark = document.createElement('div')
+        minMaxDayPlacemark.className = 'minMaxDayPlacemark'
+
+        minMaxDayBar.append(minMaxDayRange)
+        minMaxDayBar.append(minMaxDayPlacemark)
+
         minMaxDayTempContainer.append(minDayTemp)
         minMaxDayTempContainer.append(minMaxDayBar)
         minMaxDayTempContainer.append(maxDayTemp)
@@ -176,6 +185,10 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
         fiveDayInterval.append(minMaxDayTempContainer)
 
         // 5-day forecast display - set days, weather icon and min max temps.
+
+        // Store max and min temps for 5-day interval in variable
+        const fiveDayMinMaxTemps = []
+
         forecastData.forEach((forecastDataDay) => {
             if (isEqual(forecastDataDay.date, currentDate)) {
                 // Set current day
@@ -189,7 +202,13 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
                 minDayTemp.textContent = forecastDataDay.day.mintemp_c + degreeSymbol
                 maxDayTemp.textContent = forecastDataDay.day.maxtemp_c + degreeSymbol
             }
+
+            fiveDayMinMaxTemps.push(forecastDataDay.day.maxtemp_c)
+            fiveDayMinMaxTemps.push(forecastDataDay.day.mintemp_c)
         })
+
+        console.log(`Max temp: ${Math.max(...fiveDayMinMaxTemps)}`)
+        console.log(`Min temp: ${Math.min(...fiveDayMinMaxTemps)}`)
     }
 
     fiveDayIntervalDisplay()
