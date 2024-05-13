@@ -37,11 +37,8 @@ export default function displayWeather() {
                 setupMainDisplay(data, degreeSymbol)
 
                 // Setup forecast display
-                setupForecastDisplay(data, degreeSymbol)
-
-                // 5-day forecast display
-                const fiveDayForecastHeading = document.getElementById('forecast-heading')
-                fiveDayForecastHeading.textContent = '5-day Forecast'
+                const forecastData = data.forecast.forecastday
+                setupForecastDisplay(data, forecastData, degreeSymbol)
             })
             .catch((err) => {
                 console.error(err)
@@ -69,33 +66,23 @@ function setupMainDisplay(data, degreeSymbol) {
     const maxTempDiv = document.createElement('div')
     const minTempDiv = document.createElement('div')
 
-    const maxTempSpan = generateSpan(degreeSymbol)
-    const minTempSpan = generateSpan(degreeSymbol)
-
-    maxTempDiv.textContent = `H: ${data.forecast.forecastday[0].day.maxtemp_c}`
-    minTempDiv.textContent = `L: ${data.forecast.forecastday[0].day.mintemp_c}`
-
-    maxTempDiv.append(maxTempSpan)
-    minTempDiv.append(minTempSpan)
+    maxTempDiv.textContent = `H: ${data.forecast.forecastday[0].day.maxtemp_c}${degreeSymbol}`
+    minTempDiv.textContent = `L: ${data.forecast.forecastday[0].day.mintemp_c}${degreeSymbol}`
 
     timeMaxMin.append(maxTempDiv)
     timeMaxMin.append(minTempDiv)
 }
 
-function setupForecastDisplay(data, degreeSymbol) {
+function setupForecastDisplay(data, forecastData, degreeSymbol) {
+    const currentDate = format(new Date(), 'yyyy-MM-dd')
+    const weatherIconRegex = /[0-9]+\.png/
+
     function hourlyIntervalDisplay() {
         // Forecast
         const currentCondition = document.getElementById('current-condition')
         const hourlyInterval = document.getElementById('hourly-interval')
-        hourlyInterval.className = 'info active'
 
         currentCondition.textContent = `Current weather condition: ${data.current.condition.text}`
-
-        const forecastData = data.forecast.forecastday
-
-        const currentDate = format(new Date(), 'yyyy-MM-dd')
-
-        const weatherIconRegex = /[0-9]+\.png/
 
         // Generate hourly forecast for current day/date
         forecastData.forEach((forecastDayData) => {
@@ -144,11 +131,68 @@ function setupForecastDisplay(data, degreeSymbol) {
 
                     hourlyInterval.append(hourlyElem)
                 }
+
+                // Display horizontal scroll bar in hourly interval display if number of elements is more than 4.
+                if (Array.from(hourlyInterval.children).length > 4) {
+                    hourlyInterval.className = 'info active'
+                }
             }
         })
     }
 
     hourlyIntervalDisplay()
+
+    // 5-day forecast display
+    function fiveDayIntervalDisplay() {
+        const fiveDayForecastHeading = document.getElementById('forecast-heading')
+        fiveDayForecastHeading.textContent = '5-day Forecast'
+
+        const fiveDayInterval = document.getElementById('day-interval')
+
+        const days = document.createElement('div')
+        days.className = 'days'
+
+        const dayIntervalIcons = document.createElement('img')
+        dayIntervalIcons.className = 'dayWeatherIcon'
+
+        const minMaxDayTempContainer = document.createElement('div')
+        minMaxDayTempContainer.className = 'minMaxDayTemp'
+
+        const minDayTemp = document.createElement('div')
+        minDayTemp.className = 'minDayTemp'
+
+        const maxDayTemp = document.createElement('div')
+        maxDayTemp.className = 'maxDayTemp'
+
+        const minMaxDayBar = document.createElement('div')
+        minMaxDayBar.className = 'minMaxDayBar'
+
+        minMaxDayTempContainer.append(minDayTemp)
+        minMaxDayTempContainer.append(minMaxDayBar)
+        minMaxDayTempContainer.append(maxDayTemp)
+
+        fiveDayInterval.append(days)
+        fiveDayInterval.append(dayIntervalIcons)
+        fiveDayInterval.append(minMaxDayTempContainer)
+
+        // 5-day forecast display - set days, weather icon and min max temps.
+        forecastData.forEach((forecastDataDay) => {
+            if (isEqual(forecastDataDay.date, currentDate)) {
+                // Set current day
+                days.textContent = 'Today'
+
+                // Set current weather icon
+                const iconMatch = forecastDataDay.day.condition.icon.match(weatherIconRegex)[0]
+                dayIntervalIcons.src = dayImages[iconMatch]
+
+                // Set min and max temps
+                minDayTemp.textContent = forecastDataDay.day.mintemp_c + degreeSymbol
+                maxDayTemp.textContent = forecastDataDay.day.maxtemp_c + degreeSymbol
+            }
+        })
+    }
+
+    fiveDayIntervalDisplay()
 }
 
 async function getWeatherData(location) {
@@ -156,7 +200,7 @@ async function getWeatherData(location) {
 
     forecastAPI.searchParams.append('key', myKey)
     forecastAPI.searchParams.append('q', location)
-    forecastAPI.searchParams.append('days', 3)
+    forecastAPI.searchParams.append('days', 5)
 
     // Process response here.
     try {
