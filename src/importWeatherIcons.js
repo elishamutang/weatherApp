@@ -1,3 +1,5 @@
+// Imports all weather icons for night and day and store them in objects called nightImages and dayImages respectively.
+
 function importImgs(r) {
     let images = {}
     r.keys().map((item) => {
