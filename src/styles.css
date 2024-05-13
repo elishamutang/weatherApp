@@ -252,11 +252,33 @@ div#current-condition {
 }
 
 .minMaxDayBar {
-    width: 90%;
-    padding: 2px;
-    border: 1px solid white;
+    width: 100%;
+    border: 0px;
     border-radius: 5px;
-    background-color: aqua;
+    background-color: white;
+    height: 7px;
+    position: relative;
+
+    container-type: size;
+}
+
+.minMaxDayRange {
+    width: calc(100cqw - 23cqw);
+    margin-left: 23cqw;
+    height: 100%;
+    background: linear-gradient(to right, rgb(9, 185, 243), rgb(255, 166, 0));
+    border-radius: inherit;
+}
+
+.minMaxDayPlacemark {
+    width: 10px;
+    height: 10px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: -1.5px;
+    left: 0;
+    margin-left: 49cqw;
 }
 
 .days {
