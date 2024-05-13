@@ -263,8 +263,8 @@ div#current-condition {
 }
 
 .minMaxDayRange {
-    width: calc(100cqw - 23cqw);
-    margin-left: 23cqw;
+    /* width: calc(100cqw - 23cqw); */
+    /* margin-left: 23cqw; */
     height: 100%;
     background: linear-gradient(to right, rgb(9, 185, 243), rgb(255, 166, 0));
     border-radius: inherit;
@@ -278,7 +278,7 @@ div#current-condition {
     position: absolute;
     top: -1.5px;
     left: 0;
-    margin-left: 49cqw;
+    /* margin-left: 49cqw; */
 }
 
 .days {
