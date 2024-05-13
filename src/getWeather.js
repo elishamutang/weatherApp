@@ -169,7 +169,6 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
 
         const minMaxDayRange = document.createElement('div')
         minMaxDayRange.className = 'minMaxDayRange'
-        minMaxDayRange.id = 'test'
 
         const minMaxDayPlacemark = document.createElement('div')
         minMaxDayPlacemark.className = 'minMaxDayPlacemark'
@@ -210,8 +209,11 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
                 minDayTemp.textContent = forecastDataDay.day.mintemp_c + degreeSymbol
                 maxDayTemp.textContent = forecastDataDay.day.maxtemp_c + degreeSymbol
 
-                // Dyanmically set range of minMaxDayRange based on normalized datapoints.
-                // Here I normalized the lower and upper limits of the bar to [0,1]
+                // Dyanmically set range of minMaxDayRange based on normalized datapoints (e.g on a range of [0,1])
+
+                // The max and min range of the bar is the max and min temps of the whole 5-day forecast
+                // where the range of the coloured bar is the max and min temps of the given forecasted day.
+
                 const normMinTemp = normalizeDataPoint(forecastDataDay.day.mintemp_c, fiveDayMaxTemp, fiveDayMinTemp)
                 const normMaxTemp = normalizeDataPoint(forecastDataDay.day.maxtemp_c, fiveDayMaxTemp, fiveDayMinTemp)
                 const normDataPoint = normalizeDataPoint(data.current.temp_c, fiveDayMaxTemp, fiveDayMinTemp)
