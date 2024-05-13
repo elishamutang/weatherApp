@@ -36,66 +36,12 @@ export default function displayWeather() {
                 // Setup main display
                 setupMainDisplay(data, degreeSymbol)
 
-                // Forecast
-                const currentCondition = document.getElementById('current-condition')
-                const hourlyInterval = document.getElementById('hourly-interval')
+                // Setup forecast display
+                setupForecastDisplay(data, degreeSymbol)
 
-                currentCondition.textContent = `Current weather condition: ${data.current.condition.text}`
-
-                const forecastData = data.forecast.forecastday
-
-                const currentDate = format(new Date(), 'yyyy-MM-dd')
-
-                const weatherIconRegex = /[0-9]+\.png/
-
-                // Generate hourly forecast for current day/date
-                forecastData.forEach((forecastDayData) => {
-                    if (isEqual(forecastDayData.date, currentDate)) {
-                        // Set hour
-                        const [startFromIdx] = forecastDayData.hour
-                            .filter((hour) => {
-                                return getHours(hour.time) === getHours(new Date())
-                            })
-                            .map((value) => {
-                                return getHours(value.time)
-                            })
-
-                        for (let i = startFromIdx; i < forecastDayData.hour.length; i++) {
-                            console.log(forecastDayData.hour[i])
-
-                            const hourlyElem = document.createElement('div')
-                            hourlyElem.className = 'hourlyElem'
-
-                            const hour = document.createElement('div')
-                            hour.className = 'hour'
-                            hour.textContent = i === startFromIdx ? 'Now' : `${getHours(forecastDayData.hour[i].time)}`
-
-                            const hourWeatherIcon = document.createElement('img')
-                            hourWeatherIcon.className = 'hourWeatherIcon'
-
-                            const iconMatch = forecastDayData.day.condition.icon.match(weatherIconRegex)[0]
-
-                            if (forecastDayData.hour[i].is_day === 1) {
-                                // Day time
-                                hourWeatherIcon.src = dayImages[iconMatch]
-                            } else if (forecastDayData.hour[i].is_day === 0) {
-                                // Night time
-                                hourWeatherIcon.src = nightImages[iconMatch]
-                            }
-
-                            const hourTemp = document.createElement('div')
-                            hourTemp.className = 'hourTemp'
-                            hourTemp.textContent = data.current.temp_c + degreeSymbol
-
-                            const hourlyForecastElems = [hour, hourWeatherIcon, hourTemp]
-                            hourlyForecastElems.forEach((elem) => {
-                                hourlyElem.append(elem)
-                            })
-
-                            hourlyInterval.append(hourlyElem)
-                        }
-                    }
-                })
+                // 5-day forecast display
+                const fiveDayForecastHeading = document.getElementById('forecast-heading')
+                fiveDayForecastHeading.textContent = '5-day Forecast'
             })
             .catch((err) => {
                 console.error(err)
@@ -136,7 +82,74 @@ function setupMainDisplay(data, degreeSymbol) {
     timeMaxMin.append(minTempDiv)
 }
 
-function setupForecastDisplay() {}
+function setupForecastDisplay(data, degreeSymbol) {
+    function hourlyIntervalDisplay() {
+        // Forecast
+        const currentCondition = document.getElementById('current-condition')
+        const hourlyInterval = document.getElementById('hourly-interval')
+        hourlyInterval.className = 'info active'
+
+        currentCondition.textContent = `Current weather condition: ${data.current.condition.text}`
+
+        const forecastData = data.forecast.forecastday
+
+        const currentDate = format(new Date(), 'yyyy-MM-dd')
+
+        const weatherIconRegex = /[0-9]+\.png/
+
+        // Generate hourly forecast for current day/date
+        forecastData.forEach((forecastDayData) => {
+            if (isEqual(forecastDayData.date, currentDate)) {
+                // Set hour
+                const [startFromIdx] = forecastDayData.hour
+                    .filter((hour) => {
+                        return getHours(hour.time) === getHours(new Date())
+                    })
+                    .map((value) => {
+                        return getHours(value.time)
+                    })
+
+                for (let i = startFromIdx; i < forecastDayData.hour.length; i++) {
+                    const hourlyElem = document.createElement('div')
+                    hourlyElem.className = 'hourlyElem'
+
+                    const hour = document.createElement('div')
+                    hour.className = 'hour'
+                    hour.textContent = i === startFromIdx ? 'Now' : `${getHours(forecastDayData.hour[i].time)}`
+
+                    const hourWeatherIcon = document.createElement('img')
+                    hourWeatherIcon.className = 'hourWeatherIcon'
+
+                    const iconMatch = forecastDayData.day.condition.icon.match(weatherIconRegex)[0]
+
+                    if (forecastDayData.hour[i].is_day === 1) {
+                        // Day time
+                        hourWeatherIcon.src = dayImages[iconMatch]
+                    } else if (forecastDayData.hour[i].is_day === 0) {
+                        // Night time
+                        hourWeatherIcon.src = nightImages[iconMatch]
+                    }
+
+                    const hourTemp = document.createElement('div')
+                    hourTemp.className = 'hourTemp'
+                    hourTemp.textContent =
+                        i === startFromIdx
+                            ? data.current.temp_c + degreeSymbol
+                            : forecastDayData.hour[i].temp_c + degreeSymbol
+
+                    const hourlyForecastElems = [hour, hourWeatherIcon, hourTemp]
+                    hourlyForecastElems.forEach((elem) => {
+                        hourlyElem.append(elem)
+                    })
+
+                    hourlyInterval.append(hourlyElem)
+                }
+            }
+        })
+    }
+
+    hourlyIntervalDisplay()
+}
 
 async function getWeatherData(location) {
     const forecastAPI = new URL('http://api.weatherapi.com/v1/forecast.json')
