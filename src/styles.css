@@ -20,7 +20,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: var(--background);
-    object-fit: cover;
+    background-size: cover;
 }
 
 .container {
@@ -231,4 +231,34 @@ div#current-condition {
 
 #day-interval {
     grid-area: day-interval;
+
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: max-content max-content auto;
+    grid-template-rows: repeat(5, 1fr);
+    grid-template-areas: 'days weatherIcons minMaxTemp';
+    align-items: center;
+}
+
+.minMaxDayTemp {
+    display: inline-flex;
+    gap: 10px;
+    align-items: center;
+    height: 100%;
+}
+
+.minMaxDayBarContainer {
+    width: 100%;
+}
+
+.minMaxDayBar {
+    width: 90%;
+    padding: 2px;
+    border: 1px solid white;
+    border-radius: 5px;
+    background-color: aqua;
+}
+
+.days {
+    font-size: 1rem;
 }
