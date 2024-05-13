@@ -169,6 +169,7 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
 
         const minMaxDayRange = document.createElement('div')
         minMaxDayRange.className = 'minMaxDayRange'
+        minMaxDayRange.id = 'test'
 
         const minMaxDayPlacemark = document.createElement('div')
         minMaxDayPlacemark.className = 'minMaxDayPlacemark'
@@ -185,9 +186,16 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
         fiveDayInterval.append(minMaxDayTempContainer)
 
         // 5-day forecast display - set days, weather icon and min max temps.
-
-        // Store max and min temps for 5-day interval in variable
         const fiveDayMinMaxTemps = []
+
+        forecastData.forEach((forecastDataDay) => {
+            fiveDayMinMaxTemps.push(forecastDataDay.day.maxtemp_c)
+            fiveDayMinMaxTemps.push(forecastDataDay.day.mintemp_c)
+        })
+
+        // Store max and min temps for 5-day interval in the following variables
+        const fiveDayMinTemp = Math.min(...fiveDayMinMaxTemps)
+        const fiveDayMaxTemp = Math.max(...fiveDayMinMaxTemps)
 
         forecastData.forEach((forecastDataDay) => {
             if (isEqual(forecastDataDay.date, currentDate)) {
@@ -201,10 +209,18 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
                 // Set min and max temps
                 minDayTemp.textContent = forecastDataDay.day.mintemp_c + degreeSymbol
                 maxDayTemp.textContent = forecastDataDay.day.maxtemp_c + degreeSymbol
-            }
 
-            fiveDayMinMaxTemps.push(forecastDataDay.day.maxtemp_c)
-            fiveDayMinMaxTemps.push(forecastDataDay.day.mintemp_c)
+                // Dyanmically set range of minMaxDayRange based on normalized datapoints.
+                // Here I normalized the lower and upper limits of the bar to [0,1]
+                const normMinTemp = normalizeDataPoint(forecastDataDay.day.mintemp_c, fiveDayMaxTemp, fiveDayMinTemp)
+                const normMaxTemp = normalizeDataPoint(forecastDataDay.day.maxtemp_c, fiveDayMaxTemp, fiveDayMinTemp)
+                const normDataPoint = normalizeDataPoint(data.current.temp_c, fiveDayMaxTemp, fiveDayMinTemp)
+
+                minMaxDayRange.style.width = `${normMaxTemp - normMinTemp}cqw`
+                minMaxDayRange.style.marginLeft = `${normMinTemp}cqw`
+
+                minMaxDayPlacemark.style.marginLeft = `${normDataPoint}cqw`
+            }
         })
 
         console.log(`Max temp: ${Math.max(...fiveDayMinMaxTemps)}`)
@@ -245,11 +261,17 @@ function generateSpan(text) {
     return span
 }
 
+function normalizeDataPoint(dataPoint, largestPoint, lowestPoint) {
+    const result = ((dataPoint - lowestPoint) / (largestPoint - lowestPoint)) * 100
+    console.log(result)
+    return result
+}
+
 // Get the following data
 // 1. Current temperature (done)
 // 2. Current time
 // 2. Max and min temperatures (done)
 // 3. Location (done)
-// 4. Forecast (hourly interval, 5-day forecast)
+// 4. Forecast (hourly interval, 5-day forecast) (done)
 
 // Blur the different containers only, not the whole container.
