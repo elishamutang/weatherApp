@@ -235,7 +235,7 @@ div#current-condition {
     display: grid;
     gap: 1rem;
     grid-template-columns: max-content max-content auto;
-    grid-template-rows: repeat(5, 1fr);
+    grid-template-rows: repeat(auto-fit, 30px);
     grid-template-areas: 'days weatherIcons minMaxTemp';
     align-items: center;
 }
@@ -255,7 +255,7 @@ div#current-condition {
     width: 100%;
     border: 0px;
     border-radius: 5px;
-    background-color: white;
+    background-color: var(--background);
     height: 7px;
     position: relative;
 
