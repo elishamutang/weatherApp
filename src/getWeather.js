@@ -121,8 +121,8 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
                     hourTemp.className = 'hourTemp'
                     hourTemp.textContent =
                         i === startFromIdx
-                            ? data.current.temp_c + degreeSymbol
-                            : forecastDayData.hour[i].temp_c + degreeSymbol
+                            ? Math.round(data.current.temp_c) + degreeSymbol
+                            : Math.round(forecastDayData.hour[i].temp_c) + degreeSymbol
 
                     const hourlyForecastElems = [hour, hourWeatherIcon, hourTemp]
                     hourlyForecastElems.forEach((elem) => {
@@ -149,41 +149,6 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
 
         const fiveDayInterval = document.getElementById('day-interval')
 
-        const days = document.createElement('div')
-        days.className = 'days'
-
-        const dayIntervalIcons = document.createElement('img')
-        dayIntervalIcons.className = 'dayWeatherIcon'
-
-        const minMaxDayTempContainer = document.createElement('div')
-        minMaxDayTempContainer.className = 'minMaxDayTemp'
-
-        const minDayTemp = document.createElement('div')
-        minDayTemp.className = 'minDayTemp'
-
-        const maxDayTemp = document.createElement('div')
-        maxDayTemp.className = 'maxDayTemp'
-
-        const minMaxDayBar = document.createElement('div')
-        minMaxDayBar.className = 'minMaxDayBar'
-
-        const minMaxDayRange = document.createElement('div')
-        minMaxDayRange.className = 'minMaxDayRange'
-
-        const minMaxDayPlacemark = document.createElement('div')
-        minMaxDayPlacemark.className = 'minMaxDayPlacemark'
-
-        minMaxDayBar.append(minMaxDayRange)
-        minMaxDayBar.append(minMaxDayPlacemark)
-
-        minMaxDayTempContainer.append(minDayTemp)
-        minMaxDayTempContainer.append(minMaxDayBar)
-        minMaxDayTempContainer.append(maxDayTemp)
-
-        fiveDayInterval.append(days)
-        fiveDayInterval.append(dayIntervalIcons)
-        fiveDayInterval.append(minMaxDayTempContainer)
-
         // 5-day forecast display - set days, weather icon and min max temps.
         const fiveDayMinMaxTemps = []
 
@@ -197,31 +162,72 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
         const fiveDayMaxTemp = Math.max(...fiveDayMinMaxTemps)
 
         forecastData.forEach((forecastDataDay) => {
+            const days = document.createElement('div')
+            days.className = 'days'
+
+            const dayIntervalIcons = document.createElement('img')
+            dayIntervalIcons.className = 'dayWeatherIcon'
+
+            const minMaxDayTempContainer = document.createElement('div')
+            minMaxDayTempContainer.className = 'minMaxDayTemp'
+
+            const minDayTemp = document.createElement('div')
+            minDayTemp.className = 'minDayTemp'
+
+            const maxDayTemp = document.createElement('div')
+            maxDayTemp.className = 'maxDayTemp'
+
+            const minMaxDayBar = document.createElement('div')
+            minMaxDayBar.className = 'minMaxDayBar'
+
+            const minMaxDayRange = document.createElement('div')
+            minMaxDayRange.className = 'minMaxDayRange'
+
+            minMaxDayBar.append(minMaxDayRange)
+
+            minMaxDayTempContainer.append(minDayTemp)
+            minMaxDayTempContainer.append(minMaxDayBar)
+            minMaxDayTempContainer.append(maxDayTemp)
+
+            fiveDayInterval.append(days)
+            fiveDayInterval.append(dayIntervalIcons)
+            fiveDayInterval.append(minMaxDayTempContainer)
+
+            // Set current weather icon
+            const iconMatch = forecastDataDay.day.condition.icon.match(weatherIconRegex)[0]
+            dayIntervalIcons.src = dayImages[iconMatch]
+
+            // Set min and max temps
+            minDayTemp.textContent = Math.round(forecastDataDay.day.mintemp_c) + degreeSymbol
+            maxDayTemp.textContent = Math.round(forecastDataDay.day.maxtemp_c) + degreeSymbol
+
+            // Dyanmically set range of minMaxDayRange based on normalized datapoints (e.g on a range of [0,1])
+
+            // The max and min range of the bar is the max and min temps of the whole 5-day forecast
+            // where the range of the coloured bar is the max and min temps of the given forecasted day.
+
+            const normMinTemp = normalizeDataPoint(forecastDataDay.day.mintemp_c, fiveDayMaxTemp, fiveDayMinTemp)
+            const normMaxTemp = normalizeDataPoint(forecastDataDay.day.maxtemp_c, fiveDayMaxTemp, fiveDayMinTemp)
+
+            minMaxDayRange.style.width = `${normMaxTemp - normMinTemp}cqw`
+            minMaxDayRange.style.marginLeft = `${normMinTemp}cqw`
+
             if (isEqual(forecastDataDay.date, currentDate)) {
                 // Set current day
                 days.textContent = 'Today'
 
-                // Set current weather icon
-                const iconMatch = forecastDataDay.day.condition.icon.match(weatherIconRegex)[0]
-                dayIntervalIcons.src = dayImages[iconMatch]
-
-                // Set min and max temps
-                minDayTemp.textContent = forecastDataDay.day.mintemp_c + degreeSymbol
-                maxDayTemp.textContent = forecastDataDay.day.maxtemp_c + degreeSymbol
-
-                // Dyanmically set range of minMaxDayRange based on normalized datapoints (e.g on a range of [0,1])
-
-                // The max and min range of the bar is the max and min temps of the whole 5-day forecast
-                // where the range of the coloured bar is the max and min temps of the given forecasted day.
-
-                const normMinTemp = normalizeDataPoint(forecastDataDay.day.mintemp_c, fiveDayMaxTemp, fiveDayMinTemp)
-                const normMaxTemp = normalizeDataPoint(forecastDataDay.day.maxtemp_c, fiveDayMaxTemp, fiveDayMinTemp)
+                // Set normalized current temp of the day.
                 const normDataPoint = normalizeDataPoint(data.current.temp_c, fiveDayMaxTemp, fiveDayMinTemp)
 
-                minMaxDayRange.style.width = `${normMaxTemp - normMinTemp}cqw`
-                minMaxDayRange.style.marginLeft = `${normMinTemp}cqw`
+                const minMaxDayPlacemark = document.createElement('div')
+                minMaxDayPlacemark.className = 'minMaxDayPlacemark'
+
+                minMaxDayBar.append(minMaxDayPlacemark)
 
                 minMaxDayPlacemark.style.marginLeft = `${normDataPoint}cqw`
+            } else {
+                // Format day
+                days.textContent = format(forecastDataDay.date, 'EEE')
             }
         })
     }
