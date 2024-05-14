@@ -63,12 +63,16 @@ function setupMainDisplay(data, degreeSymbol) {
 
     location.textContent = `${data.location.name}, ${data.location.country}`
 
+    const timeDiv = document.createElement('div')
+
     const maxTempDiv = document.createElement('div')
     const minTempDiv = document.createElement('div')
 
+    timeDiv.textContent = `${format(data.current.last_updated, 'HH:mm')}`
     maxTempDiv.textContent = `H: ${data.forecast.forecastday[0].day.maxtemp_c}${degreeSymbol}`
     minTempDiv.textContent = `L: ${data.forecast.forecastday[0].day.mintemp_c}${degreeSymbol}`
 
+    timeMaxMin.append(timeDiv)
     timeMaxMin.append(maxTempDiv)
     timeMaxMin.append(minTempDiv)
 }
