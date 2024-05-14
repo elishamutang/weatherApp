@@ -23,20 +23,18 @@ body {
     position: relative;
 }
 
-body::before {
-    content: '';
-    background-image: url(../asset/noaa-99F4mC79j1I-unsplash.jpg);
-    background-size: cover;
+body > img {
     position: absolute;
-    opacity: 0.5;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
 }
 
 .blur-sect {
     width: 60%;
+    min-width: 60%;
     height: 80vh;
     /* border: 3px solid var(--container); */
     border-radius: 20px;
@@ -44,11 +42,14 @@ body::before {
     backdrop-filter: blur(5px);
 
     display: grid;
-    grid-template-columns: 50% 50%;
+    grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
     grid-template-rows: 10% 90%;
     grid-template-areas:
         'searchbar searchbar'
         'main forecast';
+
+    position: absolute;
+    z-index: 1;
 }
 
 #search {
@@ -158,6 +159,7 @@ body::before {
 #hourly-forecast {
     grid-area: hourly;
     grid-template-rows: 25% 75%;
+    grid-template-columns: 1fr;
     grid-template-areas:
         'current-condition'
         'hourly-interval';
@@ -221,6 +223,7 @@ div#current-condition {
 
 #five-day-forecast {
     grid-area: fiveDay;
+    grid-template-columns: 1fr;
     grid-template-rows: 20% 80%;
     grid-template-areas:
         'heading'
@@ -242,7 +245,7 @@ div#current-condition {
     display: grid;
     gap: 1rem;
     grid-template-columns: max-content max-content auto;
-    grid-template-rows: repeat(auto-fit, 30px);
+    grid-template-rows: repeat(auto-fit, minmax(30px, 1fr));
     grid-template-areas: 'days weatherIcons minMaxTemp';
     align-items: center;
 }
@@ -290,4 +293,118 @@ div#current-condition {
 
 .days {
     font-size: 1rem;
+}
+
+/* iPhone 12 */
+@media screen and (min-width: 390px) {
+    #backgroundImg {
+        height: auto;
+        width: 100%;
+    }
+
+    .blur-sect {
+        width: 100%;
+        height: 100%;
+
+        grid-template-rows: 5% repeat(2, 1fr);
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            'searchbar'
+            'main'
+            'forecast';
+    }
+
+    #search {
+        width: 100%;
+    }
+
+    #search input {
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    #forecast-heading {
+        font-size: 1rem;
+    }
+
+    #day-interval {
+        grid-template-rows: repeat(auto-fit, minmax(20px, 1fr));
+    }
+
+    #forecast {
+        grid-template-rows: repeat(auto-fit, 50%);
+    }
+
+    #main-display {
+        grid-template-rows: repeat(3, minmax(20px, 1fr));
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            'temperature'
+            'location'
+            'time-max-min';
+    }
+}
+
+/* Asus Zenfold */
+@media screen and (min-width: 391px) {
+    .blur-sect {
+        width: 70%;
+        height: 70%;
+
+        grid-template-rows: 5% 30% 65%;
+        font-size: 1rem;
+    }
+
+    #forecast-heading {
+        font-size: 1.2rem;
+    }
+
+    #backgroundImg {
+        height: 100%;
+    }
+}
+
+/* Desktop */
+@media screen and (min-width: 1200px) {
+    .blur-sect {
+        width: 60%;
+        height: 80vh;
+        grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+        grid-template-rows: 10% 90%;
+        grid-template-areas:
+            'searchbar searchbar'
+            'main forecast';
+    }
+
+    #main-display {
+        display: grid;
+        grid-template-rows: 50% auto 10% 10%;
+        grid-template-areas:
+            '.'
+            'temperature'
+            'location'
+            'time-max-min';
+    }
+
+    #search input {
+        font-size: 20px;
+        text-align: start;
+    }
+
+    #day-interval {
+        grid-template-columns: max-content max-content auto;
+        grid-template-rows: repeat(auto-fit, minmax(30px, 1fr));
+        grid-template-areas: 'days weatherIcons minMaxTemp';
+    }
+
+    #forecast {
+        grid-template-rows: 40% 60%;
+        grid-template-areas:
+            'hourly'
+            'fiveDay';
+    }
+
+    #forecast-heading {
+        font-size: 2.5cqb;
+    }
 }
