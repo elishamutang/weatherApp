@@ -213,9 +213,6 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
             const normMinTemp = normalizeDataPoint(forecastDataDay.day.mintemp_c, fiveDayMaxTemp, fiveDayMinTemp)
             const normMaxTemp = normalizeDataPoint(forecastDataDay.day.maxtemp_c, fiveDayMaxTemp, fiveDayMinTemp)
 
-            console.log(`Norm min temp: ${normMinTemp}`)
-            console.log(`Norm max temp: ${normMaxTemp}`)
-
             minMaxDayRange.style.width = `${normMaxTemp - normMinTemp}cqw`
             minMaxDayRange.style.marginLeft = `${normMinTemp}cqw`
 
@@ -230,8 +227,6 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
                 minMaxDayPlacemark.className = 'minMaxDayPlacemark'
 
                 minMaxDayBar.append(minMaxDayPlacemark)
-
-                console.log(`Norm data point: ${normDataPoint}`)
 
                 minMaxDayPlacemark.style.marginLeft = `${normDataPoint}cqw`
             } else {
@@ -279,16 +274,15 @@ function normalizeDataPoint(dataPoint, largestPoint, lowestPoint) {
     const result = ((dataPoint - lowestPoint) / (largestPoint - lowestPoint)) * 100
 
     const normalizedResult = result >= 0 ? result : result * -1
-
-    console.log(normalizedResult)
     return normalizedResult
 }
 
 // Get the following data
 // 1. Current temperature (done)
-// 2. Current time
+// 2. Current time (done)
 // 2. Max and min temperatures (done)
 // 3. Location (done)
 // 4. Forecast (hourly interval, 5-day forecast) (done)
+// 5. Added loading screen while watching for data to be fetched.
 
 // Blur the different containers only, not the whole container.
