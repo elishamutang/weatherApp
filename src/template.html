@@ -10,31 +10,29 @@
         <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
     </head>
     <body>
-        <div class="container">
-            <div class="blur-sect">
-                <form action="" id="search">
-                    <input
-                        type="text"
-                        id="search-location"
-                        name="search-location"
-                        placeholder="Search a location"
-                        required
-                    />
-                </form>
-                <div class="panel" id="main-display">
-                    <div class="info" id="temperature"></div>
-                    <div class="info" id="location"></div>
-                    <div class="info" id="time-max-min"></div>
+        <div class="blur-sect">
+            <form action="" id="search">
+                <input
+                    type="text"
+                    id="search-location"
+                    name="search-location"
+                    placeholder="Search a location"
+                    required
+                />
+            </form>
+            <div class="panel" id="main-display">
+                <div class="info" id="temperature"></div>
+                <div class="info" id="location"></div>
+                <div class="info" id="time-max-min"></div>
+            </div>
+            <div class="panel" id="forecast">
+                <div class="forecast-info" id="hourly-forecast">
+                    <div class="info heading" id="current-condition"></div>
+                    <div class="info" id="hourly-interval"></div>
                 </div>
-                <div class="panel" id="forecast">
-                    <div class="forecast-info" id="hourly-forecast">
-                        <div class="info heading" id="current-condition"></div>
-                        <div class="info" id="hourly-interval"></div>
-                    </div>
-                    <div class="forecast-info" id="five-day-forecast">
-                        <div class="heading" id="forecast-heading"></div>
-                        <div class="info" id="day-interval"></div>
-                    </div>
+                <div class="forecast-info" id="five-day-forecast">
+                    <div class="heading" id="forecast-heading"></div>
+                    <div class="info" id="day-interval"></div>
                 </div>
             </div>
         </div>
