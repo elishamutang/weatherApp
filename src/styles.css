@@ -8,6 +8,7 @@
 :root {
     --background: #3c5b6f;
     --container: #fefaf6;
+    --panel: #f6f5f2;
 }
 
 html {
@@ -28,7 +29,7 @@ body > img {
     top: 0;
     left: 0;
     width: 100%;
-    height: auto;
+    height: 100vh;
     object-fit: cover;
 }
 
@@ -38,8 +39,6 @@ body > img {
     height: 80vh;
     /* border: 3px solid var(--container); */
     border-radius: 20px;
-    background-color: transparent;
-    backdrop-filter: blur(5px);
 
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
@@ -75,7 +74,7 @@ body > img {
 
 .panel {
     color: white;
-    border: 2px solid red;
+    border: 2px solid transparent;
     border-radius: inherit;
 }
 
@@ -90,10 +89,11 @@ body > img {
         'temperature'
         'location'
         'time-max-min';
+    /* background-color: transparent; */
+    backdrop-filter: blur(10px);
 }
 
 #main-display > div {
-    /* border: 1px solid red; */
     padding-left: 4rem;
 }
 
@@ -142,6 +142,7 @@ body > img {
 
 #forecast {
     grid-area: forecast;
+    border: none;
 
     display: grid;
     grid-template-rows: 40% 60%;
@@ -152,17 +153,20 @@ body > img {
 
 #forecast > div {
     margin: 10px;
-    border: 2px solid red;
+    border: 2px solid transparent;
     border-radius: 20px;
+    backdrop-filter: blur(10px);
 }
 
-#hourly-forecast {
+div#hourly-forecast {
     grid-area: hourly;
     grid-template-rows: 25% 75%;
     grid-template-columns: 1fr;
     grid-template-areas:
         'current-condition'
         'hourly-interval';
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 .forecast-info {
@@ -199,20 +203,22 @@ div#current-condition {
 
 #hourly-interval.active {
     overflow-x: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: lightblue var(--background);
 }
 
 #hourly-interval > div {
     width: calc(100cqw / 4);
     height: 100%;
 
-    border: 1px solid red;
+    /* border: 1px solid red; */
 }
 
 .hourlyElem {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content 50% min-content;
+    place-items: center;
 
     container-type: size;
 }
@@ -273,8 +279,6 @@ div#current-condition {
 }
 
 .minMaxDayRange {
-    /* width: calc(100cqw - 23cqw); */
-    /* margin-left: 23cqw; */
     height: 100%;
     background: linear-gradient(to right, rgb(9, 185, 243), rgb(255, 166, 0));
     border-radius: inherit;
@@ -288,92 +292,27 @@ div#current-condition {
     position: absolute;
     top: -1.5px;
     left: 0;
-    /* margin-left: 49cqw; */
+}
+
+.dayWeatherIcon {
+    width: 3.5rem;
 }
 
 .days {
     font-size: 1rem;
 }
 
-/* iPhone 12 */
-@media screen and (min-width: 390px) {
-    #backgroundImg {
-        height: auto;
-        width: 100%;
-    }
-
-    .blur-sect {
-        width: 100%;
-        height: 100%;
-
-        grid-template-rows: 5% repeat(2, 1fr);
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            'searchbar'
-            'main'
-            'forecast';
-    }
-
-    #search {
-        width: 100%;
-    }
-
-    #search input {
-        font-size: 1rem;
-        text-align: center;
-    }
-
-    #forecast-heading {
-        font-size: 1rem;
-    }
-
-    #day-interval {
-        grid-template-rows: repeat(auto-fit, minmax(20px, 1fr));
-    }
-
-    #forecast {
-        grid-template-rows: repeat(auto-fit, 50%);
-    }
-
-    #main-display {
-        grid-template-rows: repeat(3, minmax(20px, 1fr));
-        grid-template-columns: 1fr;
-        grid-template-areas:
-            'temperature'
-            'location'
-            'time-max-min';
-    }
-}
-
-/* Asus Zenfold */
-@media screen and (min-width: 391px) {
+/* Screens with 1300px width */
+@media screen and (max-width: 1300px) {
     .blur-sect {
         width: 70%;
         height: 70%;
-
-        grid-template-rows: 5% 30% 65%;
-        font-size: 1rem;
-    }
-
-    #forecast-heading {
-        font-size: 1.2rem;
-    }
-
-    #backgroundImg {
-        height: 100%;
-    }
-}
-
-/* Desktop */
-@media screen and (min-width: 1200px) {
-    .blur-sect {
-        width: 60%;
-        height: 80vh;
-        grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+        grid-template-columns: 50% 50%;
         grid-template-rows: 10% 90%;
         grid-template-areas:
             'searchbar searchbar'
             'main forecast';
+        font-size: 1rem;
     }
 
     #main-display {
@@ -406,5 +345,143 @@ div#current-condition {
 
     #forecast-heading {
         font-size: 2.5cqb;
+    }
+
+    #backgroundImg {
+        width: 100%;
+        height: 100%;
+    }
+
+    #day-interval {
+        grid-template-rows: repeat(auto-fit, minmax(20px, 1fr));
+    }
+}
+
+/* Screens with 1000px width */
+@media screen and (max-width: 1000px) {
+    .blur-sect {
+        width: 60%;
+        height: 60%;
+    }
+
+    #main-display {
+        grid-template-rows: 50% 30% repeat(2, 10%);
+        grid-template-areas:
+            '.'
+            'temperature'
+            'location'
+            'time-max-min';
+    }
+
+    #main-display > div {
+        padding-left: 1rem;
+    }
+
+    #time-max-min {
+        gap: 1rem;
+    }
+
+    #forecast {
+        grid-template-rows: 40% 60%;
+    }
+
+    #forecast-heading {
+        font-size: 2cqb;
+        padding: 0.5rem;
+    }
+
+    #current-condition {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+        align-self: flex-end;
+    }
+
+    #day-interval {
+        grid-template-rows: repeat(auto-fit, minmax(1em, 1fr));
+        gap: 0.2rem;
+    }
+
+    .days {
+        font-size: 0.8em;
+    }
+
+    .dayWeatherIcon {
+        width: 2.5rem;
+    }
+
+    .hourlyElem > * {
+        font-size: 0.8rem;
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .blur-sect {
+        grid-template-columns: 1fr;
+        grid-template-rows: 10% 20% 70%;
+        grid-template-areas:
+            'searchbar'
+            'main'
+            'forecast';
+
+        width: 60%;
+        height: 95%;
+    }
+
+    #search > input {
+        height: auto;
+    }
+
+    #main-display {
+        grid-template-rows: 60% 20% 20%;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            'temperature'
+            'location'
+            'time-max-min';
+    }
+
+    #current-condition {
+        font-size: 1rem;
+    }
+
+    .hourlyElem > div {
+        font-size: 1rem;
+    }
+
+    #forecast-heading {
+        font-size: 2.5cqb;
+    }
+
+    .days,
+    .minMaxDayTemp {
+        font-size: 1rem;
+    }
+
+    .dayWeatherIcon {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .blur-sect {
+        width: 100%;
+        height: 100%;
+    }
+
+    #day-interval {
+        grid-template-columns: max-content 2.5rem auto;
+    }
+
+    .dayWeatherIcon {
+        width: 100%;
+    }
+
+    .days,
+    .minMaxDayTemp {
+        font-size: 0.8rem;
+    }
+
+    #time-max-min > div {
+        font-size: 0.8rem;
     }
 }
