@@ -286,3 +286,4 @@ function normalizeDataPoint(dataPoint, largestPoint, lowestPoint) {
 // 5. Added loading screen while watching for data to be fetched.
 
 // Blur the different containers only, not the whole container.
+// Dynamically add styling when location is loaded.
