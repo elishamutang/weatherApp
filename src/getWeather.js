@@ -256,7 +256,7 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
 
 // Fetch weather data.
 async function getWeatherData(location) {
-    const forecastAPI = new URL('http://api.weatherapi.com/v1/forecast.json')
+    const forecastAPI = new URL('https://api.weatherapi.com/v1/forecast.json')
 
     forecastAPI.searchParams.append('key', myKey)
     forecastAPI.searchParams.append('q', location)
