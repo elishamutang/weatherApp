@@ -264,7 +264,7 @@ async function getWeatherData(location) {
 
     // Process response here.
     try {
-        let forecastResponse = await fetch(forecastAPI)
+        let forecastResponse = await fetch(forecastAPI, { mode: 'cors' })
 
         if (forecastResponse.ok) {
             let data = await forecastResponse.json()
