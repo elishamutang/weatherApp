@@ -1590,7 +1590,7 @@
                         const n = new FormData(t).get('search-location')
                         console.log(n)
                         const a = (async function (t) {
-                            const e = new URL('http://api.weatherapi.com/v1/forecast.json')
+                            const e = new URL('https://api.weatherapi.com/v1/forecast.json')
                             e.searchParams.append('key', 'adcb1ecbe083464e86400231240805'),
                                 e.searchParams.append('q', t),
                                 e.searchParams.append('days', 5)
