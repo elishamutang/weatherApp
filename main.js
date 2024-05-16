@@ -1595,7 +1595,7 @@
                                 e.searchParams.append('q', t),
                                 e.searchParams.append('days', 5)
                             try {
-                                let t = await fetch(e)
+                                let t = await fetch(e, { mode: 'cors' })
                                 if (t.ok) return await t.json()
                                 if (1006 === (await t.json()).error.code) throw new Error('No location found')
                             } catch (t) {
