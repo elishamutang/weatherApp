@@ -37,7 +37,6 @@ body > img {
     width: 60%;
     min-width: 60%;
     height: 80vh;
-    /* border: 3px solid var(--container); */
     border-radius: 20px;
 
     display: grid;
@@ -48,6 +47,7 @@ body > img {
         'main forecast';
 
     position: absolute;
+    position: relative;
     z-index: 1;
 }
 
@@ -89,8 +89,7 @@ body > img {
         'temperature'
         'location'
         'time-max-min';
-    /* background-color: transparent; */
-    backdrop-filter: blur(10px);
+    transition: 1s;
 }
 
 #main-display > div {
@@ -155,7 +154,7 @@ body > img {
     margin: 10px;
     border: 2px solid transparent;
     border-radius: 20px;
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
 }
 
 div#hourly-forecast {
@@ -171,6 +170,8 @@ div#hourly-forecast {
 
 .forecast-info {
     display: grid;
+    opacity: 0;
+    transition: 1s;
 }
 
 .forecast-info > div {
@@ -179,16 +180,27 @@ div#hourly-forecast {
 
 div#current-condition {
     grid-area: current-condition;
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-end;
+    padding: 0;
+    padding-bottom: 5px;
 }
 
 .heading {
     border: none;
-    border-bottom: 2px solid var(--container);
     border-radius: inherit;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
 
     font-size: 1rem;
+}
+
+div.active-border {
+    border-bottom: 1px solid var(--container);
+    margin: 0 1rem;
+    padding-left: 0;
 }
 
 #hourly-interval {
@@ -210,8 +222,6 @@ div#current-condition {
 #hourly-interval > div {
     width: calc(100cqw / 4);
     height: 100%;
-
-    /* border: 1px solid red; */
 }
 
 .hourlyElem {
@@ -239,7 +249,9 @@ div#current-condition {
 #forecast-heading {
     grid-area: heading;
     container-type: size;
-    font-size: 2.5cqb;
+    font-size: 2cqb;
+    padding: 0;
+    padding-bottom: 5px;
 
     display: flex;
     align-items: flex-end;
@@ -302,6 +314,40 @@ div#current-condition {
     font-size: 1rem;
 }
 
+div.show {
+    backdrop-filter: blur(10px);
+    opacity: 1;
+}
+
+.loader {
+    position: absolute;
+    width: 5rem;
+    height: 5rem;
+    border: 10px solid var(--background);
+    border-radius: 50%;
+    border-top: 10px solid lightblue;
+    border-right: 10px solid lightblue;
+    border-bottom: 10px solid lightblue;
+    top: 40%;
+    left: 46%;
+    z-index: 999;
+    animation: loader 2s ease-in-out infinite;
+}
+
+@keyframes loader {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    20% {
+        transform: rotate(30deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
 /* Screens with 1300px width */
 @media screen and (max-width: 1300px) {
     .blur-sect {
@@ -326,7 +372,7 @@ div#current-condition {
     }
 
     #search input {
-        font-size: 20px;
+        font-size: 1.5rem;
         text-align: start;
     }
 
@@ -373,6 +419,10 @@ div#current-condition {
             'time-max-min';
     }
 
+    #search > input {
+        font-size: 1rem;
+    }
+
     #main-display > div {
         padding-left: 1rem;
     }
@@ -387,7 +437,6 @@ div#current-condition {
 
     #forecast-heading {
         font-size: 2cqb;
-        padding: 0.5rem;
     }
 
     #current-condition {
@@ -412,6 +461,10 @@ div#current-condition {
     .hourlyElem > * {
         font-size: 0.8rem;
     }
+
+    #location {
+        font-size: 1rem;
+    }
 }
 
 @media screen and (max-width: 900px) {
@@ -424,11 +477,12 @@ div#current-condition {
             'forecast';
 
         width: 60%;
-        height: 95%;
+        height: 80vh;
     }
 
     #search > input {
         height: auto;
+        font-size: 0.8rem;
     }
 
     #main-display {
@@ -449,7 +503,7 @@ div#current-condition {
     }
 
     #forecast-heading {
-        font-size: 2.5cqb;
+        font-size: 2cqb;
     }
 
     .days,
@@ -457,15 +511,18 @@ div#current-condition {
         font-size: 1rem;
     }
 
-    .dayWeatherIcon {
-        width: 100%;
+    #location {
+        font-size: 1rem;
+    }
+
+    #time-max-min > div {
+        font-size: 1rem;
     }
 }
 
 @media screen and (max-width: 550px) {
     .blur-sect {
         width: 100%;
-        height: 100%;
     }
 
     #day-interval {
@@ -483,5 +540,9 @@ div#current-condition {
 
     #time-max-min > div {
         font-size: 0.8rem;
+    }
+
+    #location {
+        font-size: 1rem;
     }
 }
