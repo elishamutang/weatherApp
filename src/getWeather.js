@@ -14,24 +14,19 @@ export default function displayWeather() {
 
         const weatherData = getWeatherData(location)
 
+        // Loading when fetching data
+        if (!document.querySelector('.loader')) {
+            insertLoader()
+        }
+
         weatherData
             .then((data) => {
                 console.log(data)
 
                 const degreeSymbol = '\u2103'
 
-                // Clear existing data
-                const infoElems = Array.from(document.getElementsByClassName('info'))
-
-                infoElems.forEach((elem) => {
-                    if (elem.hasChildNodes()) {
-                        const elemChildren = Array.from(elem.children)
-
-                        elemChildren.forEach((child) => {
-                            child.remove()
-                        })
-                    }
-                })
+                // Remove loading icon after finished fetching data.
+                document.querySelector('.loader').remove()
 
                 // Setup main display
                 setupMainDisplay(data, degreeSymbol)
@@ -42,6 +37,11 @@ export default function displayWeather() {
             })
             .catch((err) => {
                 console.error(err)
+
+                document.getElementById('main-display').className = 'panel'
+                Array.from(document.getElementsByClassName('forecast-info')).forEach((div) => {
+                    div.className = 'forecast-info'
+                })
             })
     })
 }
@@ -52,6 +52,10 @@ function setupMainDisplay(data, degreeSymbol) {
     const location = document.getElementById('location')
     const timeMaxMin = document.getElementById('time-max-min')
 
+    // Show blurred container
+    const mainDisplay = document.getElementById('main-display')
+    mainDisplay.className = 'panel show'
+
     // Populate main display
     const tempReading = document.createElement('h1')
     tempReading.textContent = data.current.temp_c
@@ -61,7 +65,10 @@ function setupMainDisplay(data, degreeSymbol) {
 
     temperature.append(tempReading)
 
-    location.textContent = `${data.location.name}, ${data.location.country}`
+    const locationHeading = document.createElement('p')
+    locationHeading.textContent = `${data.location.name}, ${data.location.country}`
+
+    location.append(locationHeading)
 
     const timeDiv = document.createElement('div')
 
@@ -81,12 +88,19 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
     const currentDate = format(new Date(), 'yyyy-MM-dd')
     const weatherIconRegex = /[0-9]+\.png/
 
+    // Show blurred containers
+    const forecastChildDivs = Array.from(document.getElementById('forecast').children)
+    forecastChildDivs.forEach((div) => {
+        div.className = 'forecast-info show'
+    })
+
     function hourlyIntervalDisplay() {
         // Forecast
         const currentCondition = document.getElementById('current-condition')
         const hourlyInterval = document.getElementById('hourly-interval')
 
         currentCondition.textContent = `Current weather condition: ${data.current.condition.text}`
+        currentCondition.className = 'info heading active-border'
 
         // Generate hourly forecast for current day/date
         forecastData.forEach((forecastDayData) => {
@@ -147,23 +161,24 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
     hourlyIntervalDisplay()
 
     // 5-day forecast display
-    function fiveDayIntervalDisplay() {
-        const fiveDayForecastHeading = document.getElementById('forecast-heading')
-        fiveDayForecastHeading.textContent = '5-day Forecast'
+    function dayIntervalDisplay() {
+        const dayForecastHeading = document.getElementById('forecast-heading')
+        dayForecastHeading.textContent = '5-day Forecast'
+        dayForecastHeading.className = 'info heading active-border'
 
-        const fiveDayInterval = document.getElementById('day-interval')
+        const dayInterval = document.getElementById('day-interval')
 
         // 5-day forecast display - set days, weather icon and min max temps.
-        const fiveDayMinMaxTemps = []
+        const weekMinMaxTemps = []
 
         forecastData.forEach((forecastDataDay) => {
-            fiveDayMinMaxTemps.push(forecastDataDay.day.maxtemp_c)
-            fiveDayMinMaxTemps.push(forecastDataDay.day.mintemp_c)
+            weekMinMaxTemps.push(forecastDataDay.day.maxtemp_c)
+            weekMinMaxTemps.push(forecastDataDay.day.mintemp_c)
         })
 
         // Store max and min temps for 5-day interval in the following variables
-        const fiveDayMinTemp = Math.min(...fiveDayMinMaxTemps)
-        const fiveDayMaxTemp = Math.max(...fiveDayMinMaxTemps)
+        const weekMinTemp = Math.min(...weekMinMaxTemps)
+        const weekMaxTemp = Math.max(...weekMinMaxTemps)
 
         forecastData.forEach((forecastDataDay) => {
             const days = document.createElement('div')
@@ -193,9 +208,9 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
             minMaxDayTempContainer.append(minMaxDayBar)
             minMaxDayTempContainer.append(maxDayTemp)
 
-            fiveDayInterval.append(days)
-            fiveDayInterval.append(dayIntervalIcons)
-            fiveDayInterval.append(minMaxDayTempContainer)
+            dayInterval.append(days)
+            dayInterval.append(dayIntervalIcons)
+            dayInterval.append(minMaxDayTempContainer)
 
             // Set current weather icon
             const iconMatch = forecastDataDay.day.condition.icon.match(weatherIconRegex)[0]
@@ -210,8 +225,8 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
             // The max and min range of the bar is the max and min temps of the whole 5-day forecast
             // where the range of the coloured bar is the max and min temps of the given forecasted day.
 
-            const normMinTemp = normalizeDataPoint(forecastDataDay.day.mintemp_c, fiveDayMaxTemp, fiveDayMinTemp)
-            const normMaxTemp = normalizeDataPoint(forecastDataDay.day.maxtemp_c, fiveDayMaxTemp, fiveDayMinTemp)
+            const normMinTemp = normalizeDataPoint(forecastDataDay.day.mintemp_c, weekMaxTemp, weekMinTemp)
+            const normMaxTemp = normalizeDataPoint(forecastDataDay.day.maxtemp_c, weekMaxTemp, weekMinTemp)
 
             minMaxDayRange.style.width = `${normMaxTemp - normMinTemp}cqw`
             minMaxDayRange.style.marginLeft = `${normMinTemp}cqw`
@@ -221,7 +236,7 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
                 days.textContent = 'Today'
 
                 // Set normalized current temp of the day.
-                const normDataPoint = normalizeDataPoint(data.current.temp_c, fiveDayMaxTemp, fiveDayMinTemp)
+                const normDataPoint = normalizeDataPoint(data.current.temp_c, weekMaxTemp, weekMinTemp)
 
                 const minMaxDayPlacemark = document.createElement('div')
                 minMaxDayPlacemark.className = 'minMaxDayPlacemark'
@@ -236,9 +251,10 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
         })
     }
 
-    fiveDayIntervalDisplay()
+    dayIntervalDisplay()
 }
 
+// Fetch weather data.
 async function getWeatherData(location) {
     const forecastAPI = new URL('http://api.weatherapi.com/v1/forecast.json')
 
@@ -260,6 +276,7 @@ async function getWeatherData(location) {
         }
     } catch (err) {
         console.error(err)
+        alert(err)
     }
 }
 
@@ -277,13 +294,43 @@ function normalizeDataPoint(dataPoint, largestPoint, lowestPoint) {
     return normalizedResult
 }
 
-// Get the following data
-// 1. Current temperature (done)
-// 2. Current time (done)
-// 2. Max and min temperatures (done)
-// 3. Location (done)
-// 4. Forecast (hourly interval, 5-day forecast) (done)
-// 5. Added loading screen while watching for data to be fetched.
+function insertLoader() {
+    const blurSect = document.querySelector('.blur-sect')
 
-// Blur the different containers only, not the whole container.
-// Dynamically add styling when location is loaded.
+    const loader = document.createElement('div')
+    loader.className = 'loader'
+
+    blurSect.insertAdjacentElement('afterbegin', loader)
+
+    document.getElementById('main-display').className = 'panel'
+    Array.from(document.getElementsByClassName('forecast-info')).forEach((div) => {
+        div.className = 'forecast-info'
+    })
+
+    // Clear existing data
+    const infoElems = Array.from(document.getElementsByClassName('info'))
+
+    infoElems.forEach((elem) => {
+        if (elem.hasChildNodes()) {
+            const elemChildren = Array.from(elem.children)
+
+            elemChildren.forEach((child) => {
+                child.remove()
+            })
+        }
+    })
+
+    const headings = Array.from(document.getElementsByClassName('heading'))
+
+    headings.forEach((heading) => {
+        heading.textContent = ''
+
+        if (Array.from(heading.classList).includes('active-border')) {
+            heading.className = Array.from(heading.classList)
+                .filter((className) => {
+                    return className !== 'active-border'
+                })
+                .join(' ')
+        }
+    })
+}
