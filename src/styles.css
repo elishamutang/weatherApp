@@ -486,7 +486,7 @@ div.show {
     }
 
     #main-display {
-        grid-template-rows: 60% 20% 20%;
+        grid-template-rows: 50% 30% 20%;
         grid-template-columns: 1fr;
         grid-template-areas:
             'temperature'
