@@ -8,7 +8,7 @@
 :root {
     --background: #3c5b6f;
     --container: #fefaf6;
-    --panel: #f6f5f2;
+    --panel: #e3ecff1f;
 }
 
 html {
@@ -80,7 +80,7 @@ body > img {
 
 #main-display {
     grid-area: main;
-    width: 100%;
+    margin: 10px;
 
     display: grid;
     grid-template-rows: 50% auto 10% 10%;
@@ -151,9 +151,9 @@ body > img {
 }
 
 #forecast > div {
-    margin: 10px;
     border: 2px solid transparent;
     border-radius: 20px;
+    margin: 10px;
     /* backdrop-filter: blur(10px); */
 }
 
@@ -319,6 +319,7 @@ div.show {
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
     opacity: 1;
+    border: 1px solid var(--panel);
 }
 
 .loader {

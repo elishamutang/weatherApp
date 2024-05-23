@@ -163,12 +163,12 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
     // 5-day forecast display
     function dayIntervalDisplay() {
         const dayForecastHeading = document.getElementById('forecast-heading')
-        dayForecastHeading.textContent = '5-day Forecast'
+        dayForecastHeading.textContent = '3-day Forecast'
         dayForecastHeading.className = 'info heading active-border'
 
         const dayInterval = document.getElementById('day-interval')
 
-        // 5-day forecast display - set days, weather icon and min max temps.
+        // 3-day forecast display - set days, weather icon and min max temps.
         const weekMinMaxTemps = []
 
         forecastData.forEach((forecastDataDay) => {
@@ -176,7 +176,7 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
             weekMinMaxTemps.push(forecastDataDay.day.mintemp_c)
         })
 
-        // Store max and min temps for 5-day interval in the following variables
+        // Store max and min temps for 3-day interval in the following variables
         const weekMinTemp = Math.min(...weekMinMaxTemps)
         const weekMaxTemp = Math.max(...weekMinMaxTemps)
 
@@ -222,7 +222,7 @@ function setupForecastDisplay(data, forecastData, degreeSymbol) {
 
             // Dyanmically set range of minMaxDayRange based on normalized datapoints (e.g on a range of [0,1])
 
-            // The max and min range of the bar is the max and min temps of the whole 5-day forecast
+            // The max and min range of the bar is the max and min temps of the whole 3-day forecast
             // where the range of the coloured bar is the max and min temps of the given forecasted day.
 
             const normMinTemp = normalizeDataPoint(forecastDataDay.day.mintemp_c, weekMaxTemp, weekMinTemp)
@@ -260,7 +260,7 @@ async function getWeatherData(location) {
 
     forecastAPI.searchParams.append('key', myKey)
     forecastAPI.searchParams.append('q', location)
-    forecastAPI.searchParams.append('days', 5)
+    forecastAPI.searchParams.append('days', 3) // Changed to 3 days due to end of trial plan.
 
     // Process response here.
     try {
