@@ -1593,7 +1593,7 @@
                             const e = new URL('https://api.weatherapi.com/v1/forecast.json')
                             e.searchParams.append('key', 'adcb1ecbe083464e86400231240805'),
                                 e.searchParams.append('q', t),
-                                e.searchParams.append('days', 5)
+                                e.searchParams.append('days', 3)
                             try {
                                 let t = await fetch(e, { mode: 'cors' })
                                 if (t.ok) return await t.json()
@@ -1701,7 +1701,7 @@
                                                 })(),
                                                 (function () {
                                                     const s = document.getElementById('forecast-heading')
-                                                    ;(s.textContent = '5-day Forecast'),
+                                                    ;(s.textContent = '3-day Forecast'),
                                                         (s.className = 'info heading active-border')
                                                     const o = document.getElementById('day-interval'),
                                                         i = []

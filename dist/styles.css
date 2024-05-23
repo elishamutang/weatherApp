@@ -7,7 +7,7 @@
 :root {
     --background: #3c5b6f;
     --container: #fefaf6;
-    --panel: #f6f5f2;
+    --panel: #e3ecff1f;
 }
 html {
     height: 100%;
@@ -68,8 +68,8 @@ body > img {
     grid-area: main;
     grid-template-areas: '.' 'temperature' 'location' 'time-max-min';
     grid-template-rows: 50% auto 10% 10%;
+    margin: 10px;
     transition: 1s;
-    width: 100%;
 }
 #main-display > div {
     padding-left: 2rem;
@@ -246,6 +246,7 @@ div.active-border {
 div.show {
     -webkit-backdrop-filter: blur(10px);
     backdrop-filter: blur(10px);
+    border: 1px solid var(--panel);
     opacity: 1;
 }
 .loader {
