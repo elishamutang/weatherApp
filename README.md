@@ -1,6 +1,6 @@
 # Weather App
 
-![WeatherApp screenshot](asset/app-screenshot.png)
+![demo](asset/weatherApp-demo.gif)
 
 A weather app project written using only HTML, CSS and vanilla JavaScript that essentially does the following:
 
